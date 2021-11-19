@@ -1,5 +1,5 @@
-from  import constants
-from action import Action
+import constants
+from game.action import Action
 from point import Point
 
 

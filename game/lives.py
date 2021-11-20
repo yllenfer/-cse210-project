@@ -1,4 +1,3 @@
-
 class Lives:
 
     def __init__(self):

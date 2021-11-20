@@ -1,4 +1,2 @@
-
 class Collision:
-
     pass

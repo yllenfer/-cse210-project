@@ -2,5 +2,5 @@ from game.director import Director
 import arcade
 
 director = Director()
-director.start_game()
+director.setup()
 arcade.run()

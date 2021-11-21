@@ -1,24 +1,34 @@
 import arcade
-from game.constants import SPRITE_SCALING
-from game.point import Point
+from game.constants import SPRITE_SCALING, SCREEN_WIDTH, SCREEN_HEIGHT
+import os
 
 
 class Player(arcade.Sprite):
 
     def __init__(self):
-        self.player = None
-        # self.change_x = 0
-        # self.change_y = 0
-        self.center_x = 0
-        self.center_y = 0
-        super().__init__()
+        # self.player_sprite = None
+        super().__init__(":resources:images/animated_characters/female_person/femalePerson_idle.png",
+                         SPRITE_SCALING)
 
-    # def do_update(self):
-    #     pass
+        self.center_x = 400
+        self.center_y = 50
 
-    def create_player(self):
-        self.player.center_x = 50
-        self.player.center_y = 50
-        self.player = arcade.Sprite(":resources:images/animated_characters/female_person/femalePerson_idle.png",
-                                    SPRITE_SCALING)
-        # create sprite list and add the player in it
+    def update(self):
+
+        """ Move the player """
+
+        self.center_x += self.change_x
+        self.center_y += self.change_y
+
+        # Check for out-of-bounds
+        if self.left < 0:
+            self.left = 0
+
+        elif self.right > SCREEN_WIDTH - 1:
+            self.right = SCREEN_WIDTH - 1
+
+        if self.bottom < 0:
+            self.bottom = 0
+
+        elif self.top > SCREEN_HEIGHT - 1:
+            self.top = SCREEN_HEIGHT - 1

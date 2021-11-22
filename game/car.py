@@ -6,20 +6,22 @@ import random
 class Car(arcade.Sprite):
 
     def __init__(self):
-        self.cars_list = None
-        self.car = None
         super().__init__(":resources:images/enemies/wormGreen.png", SPRITE_SCALING)
+        self.change_x = 2
+        self.reset_position()
 
     def reset_position(self):
-        self.center_y = random.randrange(SCREEN_HEIGHT + 40,
-                                         SCREEN_HEIGHT + 100)
-        self.center_x = random.randrange(SCREEN_WIDTH)
+        self.center_y = 400#random.randrange(SCREEN_HEIGHT + 20,
+                                        # SCREEN_HEIGHT + 100)
+        self.center_x = 300#random.randrange(0)
 
     def update(self):
         # Move the coin
-        self.center_y -= 1
+        #self.center_y -= 1
 
         # See if the coin has fallen off the bottom of the screen.
         # If so, reset it.
-        if self.top < 0:
+        if self.left > SCREEN_WIDTH:
             self.reset_position()
+
+        return super().update()

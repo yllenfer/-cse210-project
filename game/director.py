@@ -12,7 +12,7 @@ class Director(arcade.Window):
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
-        self.cart_list = arcade.SpriteList()
+        self.car_list = arcade.SpriteList()
         self.coin = None
         self.player = None
         self.score = 0
@@ -24,24 +24,24 @@ class Director(arcade.Window):
         self.car = Car()
         self.player_list.append(self.player)
         self.coin_list.append(self.coin)
-        self.cart_list.append(self.car)
+        self.car_list.append(self.car)
         self.score = Score()
 
     def on_draw(self):
         arcade.start_render()
         self.player_list.draw()
         self.coin_list.draw()
-        self.cart_list.draw()
+        self.car_list.draw()
 
     def on_update(self, delta_time):
         self.player_list.update()
         self.coin_list.update()
-        self.cart_list.update()
+        self.car_list.update()
         coin_collision_list = arcade.check_for_collision_with_list(self.player, self.coin_list)
         for coin in coin_collision_list:
             coin.remove_from_sprite_lists()
             # self.score += 1
-        if arcade.check_for_collision_with_list(self.player, self.cart_list):
+        if arcade.check_for_collision_with_list(self.player, self.car_list):
             self.player.center_y = 0
 
     def on_key_press(self, key, modifiers):

@@ -1,5 +1,5 @@
 import arcade
-from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT
+from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT, Y_COUNT, Y_SPACING, Y_START
 from game.player import Player
 from game.score import Score
 from game.coin import Coin
@@ -21,10 +21,11 @@ class Director(arcade.Window):
     def setup(self):
         self.player = Player()
         self.coin = Coin()
-        self.car = Car()
+
+        self.car_creation()
+        
         self.player_list.append(self.player)
-        self.coin_list.append(self.coin)
-        self.car_list.append(self.car)
+        self.coin_list.append(self.coin) 
         self.score = Score()
 
     def on_draw(self):
@@ -75,3 +76,9 @@ class Director(arcade.Window):
 
         elif key == arcade.key.RIGHT:
             self.player.change_x = NO_MOVEMENT
+
+    def car_creation(self):
+
+        for y in range(Y_START, (Y_SPACING * Y_COUNT), Y_SPACING):
+            self.car = Car(y)
+            self.car_list.append(self.car)

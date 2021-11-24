@@ -1,3 +1,5 @@
+import os
+
 # car
 SPRITE_SCALING = 0.5
 SPRITE_NATIVE_SIZE = 128
@@ -14,3 +16,11 @@ SCREEN_TITLE = "FROGGER"
 #movement
 MOVEMENT_SPEED = 10
 NO_MOVEMENT = 0
+
+#car spacing
+Y_COUNT = 5
+Y_START = 50
+Y_SPACING = 100
+
+PICTURES_PATH = os.path.dirname(os.path.abspath(__file__)) + "/pictures/"
+

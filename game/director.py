@@ -1,9 +1,11 @@
 import arcade
-from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT, Y_COUNT, Y_SPACING, Y_START
+import random
+from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT, Y_COUNT, Y_SPACING, Y_START, LIFE_COUNT, LIFE_POSITION_START, LIFE_SPACING
 from game.player import Player
 from game.score import Score
 from game.coin import Coin
 from game.car import Car
+from game.lives import Lives
 
 
 class Director(arcade.Window):
@@ -13,19 +15,33 @@ class Director(arcade.Window):
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
         self.car_list = arcade.SpriteList()
+        self.life_list = arcade.SpriteList()
+        self.car_collision_sound = arcade.load_sound(":resources:sounds/hit1.wav")
+        self.coin_collision_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.coin = None
         self.player = None
         self.score = 0
         self.car = None
+        self.lives = 0
 
     def setup(self):
         self.player = Player()
         self.coin = Coin()
+        # self.lives = Lives()
+        bottom_cars_velocity = [2, 3, -2, -3]
+        middle_cars_velocity = [5, 6, -5, -6]
+        top_cars_velocity = [7, 8, -7, -8]
+        self.car_creation(random.choice(bottom_cars_velocity), Y_START, 250)
+        self.car_creation(random.choice(middle_cars_velocity), (Y_START + 250), 500)
+        self.car_creation(random.choice(top_cars_velocity), (Y_START + 500), SCREEN_HEIGHT-50)
 
-        self.car_creation()
+        # self.car_creation_middle()
+        # self.car_creation_top()
+        self.life_creation()
         
         self.player_list.append(self.player)
         self.coin_list.append(self.coin) 
+        # self.life_list.append(self.lives)
         self.score = Score()
 
     def on_draw(self):
@@ -33,6 +49,7 @@ class Director(arcade.Window):
         self.player_list.draw()
         self.coin_list.draw()
         self.car_list.draw()
+        self.life_list.draw()
 
     def on_update(self, delta_time):
         self.player_list.update()
@@ -41,9 +58,16 @@ class Director(arcade.Window):
         coin_collision_list = arcade.check_for_collision_with_list(self.player, self.coin_list)
         for coin in coin_collision_list:
             coin.remove_from_sprite_lists()
+            self.coin_collision_sound.play()
             # self.score += 1
         if arcade.check_for_collision_with_list(self.player, self.car_list):
             self.player.center_y = 0
+            self.car_collision_sound.play()
+            self.life_list.pop()
+            if self.life_list == 0:
+                self.game_over = True
+                print("Game Over")
+            
 
     def on_key_press(self, key, modifiers):
 
@@ -77,8 +101,14 @@ class Director(arcade.Window):
         elif key == arcade.key.RIGHT:
             self.player.change_x = NO_MOVEMENT
 
-    def car_creation(self):
-
-        for y in range(Y_START, (Y_SPACING * Y_COUNT), Y_SPACING):
-            self.car = Car(y)
+    def car_creation(self, velocity, start, stop):
+        for y in range(start, (stop + 1), Y_SPACING):
+            self.car = Car(y, velocity)
             self.car_list.append(self.car)
+          
+
+    def life_creation(self):
+        for x in range(LIFE_POSITION_START, (LIFE_SPACING * LIFE_COUNT), LIFE_SPACING):
+            self.lives = Lives(x)
+            self.life_list.append(self.lives)
+

@@ -8,6 +8,10 @@ class Score:
 
     def __init__(self):
         self.score = 0
+        # arcade.draw_text(self.output,
+        #                  45, 30,
+        #                  arcade.color.WHITE, 12,
+        #                  anchor_x="center")
 
     # def calculate_score(self):
     #     # check for collision is a built-in function from the arcade

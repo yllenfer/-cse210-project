@@ -1,5 +1,6 @@
 import arcade
 
+
 class Lives(arcade.Sprite):
 
     def __init__(self, center_x):

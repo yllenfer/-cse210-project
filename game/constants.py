@@ -28,6 +28,8 @@ Y_SPACING = 50
 LIFE_COUNT = 3
 LIFE_POSITION_START = 20
 LIFE_SPACING = 20
+GAME_OVER = 1
+PLAY_GAME = 0
 
 PICTURES_PATH = os.path.dirname(os.path.abspath(__file__)) + "/pictures/"
 

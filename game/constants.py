@@ -19,15 +19,4 @@ SCREEN_TITLE = "FROGGER"
 MOVEMENT_SPEED = 10
 NO_MOVEMENT = 0
 
-#car spacing
-Y_COUNT = 5
-Y_START = 100
-Y_SPACING = 50
-
-# lives
-LIFE_COUNT = 3
-LIFE_POSITION_START = 20
-LIFE_SPACING = 20
-
-PICTURES_PATH = os.path.dirname(os.path.abspath(__file__)) + "/pictures/"
 

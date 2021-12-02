@@ -2,17 +2,18 @@ import arcade
 from game.constants import SPRITE_SCALING, SCREEN_WIDTH, SCREEN_HEIGHT
 import os
 
-
 class Player(arcade.Sprite):
 
-    def __init__(self):
-        # self.player_sprite = None
-        super().__init__(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+   def __init__(self):
+      #self.player_sprite = None
+      super().__init__(":resources:images/animated_characters/female_person/femalePerson_idle.png", 
+                                 SPRITE_SCALING)
+      
+      self.center_x = 400
+      self.center_y = 50
 
-        self.center_x = 400
-        self.center_y = 50
 
-    def update(self):
+   def update(self):
 
         """ Move the player """
 

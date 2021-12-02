@@ -1,7 +1,7 @@
 import arcade
 import random
 from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT, Y_COUNT, Y_SPACING, \
-    Y_START, LIFE_COUNT, LIFE_POSITION_START, LIFE_SPACING
+    Y_START, LIFE_COUNT, LIFE_POSITION_START, LIFE_SPACING, NUM_CARS_PER_ROW
 from game.player import Player
 from game.score import Score
 from game.coin import Coin
@@ -29,7 +29,6 @@ class Director(arcade.Window):
         # TODO: Where shall we create the time? Director or another class?
         self.total_time = 0.0
         self.output = "00:00:00"
-
         self.run_timer = True
 
     def setup(self):
@@ -38,17 +37,14 @@ class Director(arcade.Window):
         self.score = Score()
         self.total_time = 0.0
         # self.lives = Lives()
-        bottom_cars_velocity = [2, 3, -2, -3]
-        middle_cars_velocity = [5, 6, -5, -6]
-        top_cars_velocity = [7, 8, -7, -8]
-        self.car_creation(random.choice(bottom_cars_velocity), Y_START, 250)
-        self.car_creation(random.choice(middle_cars_velocity), (Y_START + 250), 500)
-        self.car_creation(random.choice(top_cars_velocity), (Y_START + 500), SCREEN_HEIGHT - 50)
+        bottom_cars_velocity = [2, 5, -2, -5]
+        middle_cars_velocity = [6, 9, -6, -9]
+        for i in range(0, NUM_CARS_PER_ROW):
+            self.car_creation(bottom_cars_velocity, Y_START, 250)                                       #(velocity, 100, 250)
+            self.car_creation((middle_cars_velocity), (Y_START + 250), 500)                             #(velocity, 350, 500)
 
-        # self.car_creation_middle()
-        # self.car_creation_top()
+
         self.life_creation()
-        # self.draw_timer()
         self.points_earned_reaching_top()
 
         self.player_list.append(self.player)
@@ -75,41 +71,45 @@ class Director(arcade.Window):
                              anchor_x="center")
 
     def on_update(self, delta_time):
-        self.player_list.update()
-        self.coin_list.update()
-        self.car_list.update()
-        self.life_list.update()
+        if not self.game_over:
 
-        coin_collision_list = arcade.check_for_collision_with_list(self.player, self.coin_list)
-        for coin in coin_collision_list:
-            self.coin_list.remove(coin)
-            # coin.remove_from_sprite_lists()
-            self.coin_collision_sound.play()
-            # TODO: We need to verify why a life needs to be lost in order to earn one
-            life = Lives(LIFE_SPACING * (len(self.life_list) + 1))
-            self.life_list.append(life)
-            # if self.game_state == GAME_OVER:
-            #     return
+            self.player_list.update()
+            self.coin_list.update()
+            self.car_list.update()
+            self.life_list.update()
+            self.points_earned_reaching_top()
 
-        if arcade.check_for_collision_with_list(self.player, self.car_list):
-            self.player.center_y = 0
-            self.car_collision_sound.play()
-            if self.life_list:
-                self.life_list.pop()
-            else:
-                # TODO: Work on game over
-                self.game_over = True
-                print("Game Over")
+            coin_collision_list = arcade.check_for_collision_with_list(self.player, self.coin_list)
+            for coin in coin_collision_list:
+                self.coin_list.remove(coin)
+                # coin.remove_from_sprite_lists()
+                self.coin_collision_sound.play()
+                # TODO: We need to verify why a life needs to be lost in order to earn one
+                life = Lives(LIFE_SPACING * (len(self.life_list) + 1))
+                self.life_list.append(life)
+                # if self.game_state == GAME_OVER:
+                #     return
 
-        # TODO: Work on timer and score  so it increases number of points
-        # TODO: Track time to determine the number of points
+            if arcade.check_for_collision_with_list(self.player, self.car_list):
+                self.player.center_y = 0
+                self.car_collision_sound.play()
+                if self.life_list:
+                    self.life_list.pop()
+                else:
+                    # TODO: Work on game over
+                    self.game_over = True
+                    print("Game Over")
+                    self.player_list.remove(self.player)
 
-        if self.run_timer:
-            self.total_time += delta_time
-            minutes = int(self.total_time) // 60
-            seconds = int(self.total_time) % 60
-            seconds_100s = int((self.total_time - seconds) * 100)
-            self.output = f"{minutes:02d}:{seconds:02d}:{seconds_100s:02d}"
+            # TODO: Work on timer and score  so it increases number of points
+            # TODO: Track time to determine the number of points
+
+            if self.run_timer:
+                self.total_time += delta_time
+                minutes = int(self.total_time) // 60
+                seconds = int(self.total_time) % 60
+                seconds_100s = int((self.total_time - seconds) * 100)
+                self.output = f"{minutes:02d}:{seconds:02d}:{seconds_100s:02d}"
 
     def on_key_press(self, key, modifiers):
 
@@ -145,7 +145,7 @@ class Director(arcade.Window):
 
     def car_creation(self, velocity, start, stop):
         for y in range(start, (stop + 1), Y_SPACING):
-            self.car = Car(y, velocity)
+            self.car = Car(y, (random.choice(velocity)))
             self.car_list.append(self.car)
 
     def life_creation(self):

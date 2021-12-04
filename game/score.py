@@ -7,7 +7,7 @@ import arcade
 class Score:
 
     def __init__(self):
-        self.score = 0
+        self.score = 1.0
         # arcade.draw_text(self.output,
         #                  45, 30,
         #                  arcade.color.WHITE, 12,

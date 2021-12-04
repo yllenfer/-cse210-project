@@ -1,7 +1,8 @@
+from math import pi
 import arcade
 import random
 from game.constants import SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE, MOVEMENT_SPEED, NO_MOVEMENT, Y_COUNT, Y_SPACING, \
-    Y_START, LIFE_COUNT, LIFE_POSITION_START, LIFE_SPACING, NUM_CARS_PER_ROW
+    Y_START, LIFE_COUNT, LIFE_POSITION_START, LIFE_SPACING, NUM_CARS_PER_ROW, PICTURES_PATH
 from game.player import Player
 from game.score import Score
 from game.coin import Coin
@@ -13,6 +14,7 @@ class Director(arcade.Window):
     def __init__(self):
         super().__init__(SCREEN_WIDTH, SCREEN_HEIGHT, SCREEN_TITLE)
         self.game_over = False
+        self.background = None
         arcade.set_background_color(arcade.color.SMOKY_BLACK)
         self.player_list = arcade.SpriteList()
         self.coin_list = arcade.SpriteList()
@@ -23,7 +25,7 @@ class Director(arcade.Window):
         self.coin_collision_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.coin = None
         self.player = None
-        self.score = 0
+        self.score = 1.0
         self.car = None
         # self.lives = None
         # TODO: Where shall we create the time? Director or another class?
@@ -32,9 +34,10 @@ class Director(arcade.Window):
         self.run_timer = True
 
     def setup(self):
+        self.background = arcade.load_texture(PICTURES_PATH + "Frogger background.PNG")
         self.player = Player()
         self.coin = Coin()
-        self.score = Score()
+        # self.score = Score()
         self.total_time = 0.0
         # self.lives = Lives()
         bottom_cars_velocity = [2, 5, -2, -5]
@@ -54,11 +57,12 @@ class Director(arcade.Window):
 
     def on_draw(self):
         arcade.start_render()
+        arcade.draw_texture_rectangle(SCREEN_WIDTH // 2, SCREEN_HEIGHT // 2, SCREEN_WIDTH, SCREEN_HEIGHT, self.background)
         self.player_list.draw()
         self.coin_list.draw()
         self.car_list.draw()
         self.life_list.draw()
-        # self.draw_timer()
+        self.points_earned_reaching_top()
         arcade.draw_text(self.output,
                          45, 30,
                          arcade.color.WHITE, 12,
@@ -104,7 +108,7 @@ class Director(arcade.Window):
             # TODO: Work on timer and score  so it increases number of points
             # TODO: Track time to determine the number of points
 
-            if self.run_timer:
+            if self.run_timer == True:
                 self.total_time += delta_time
                 minutes = int(self.total_time) // 60
                 seconds = int(self.total_time) % 60
@@ -155,10 +159,11 @@ class Director(arcade.Window):
 
     def points_earned_reaching_top(self):
 
-        # Track of time, we need to bring back the already track time from the on_update function
-        # We need to set a number of points according to seconds
-        # Set a number of points per tracked time. AKA if sec < xxx we get xxx score and so on
-        # Once player reached the top we display the score
-        if self.player.center_y == SCREEN_HEIGHT - 100:
+        if self.player.center_y > SCREEN_HEIGHT-50 :
             self.run_timer = False
-            # self.output.pause()
+            minutes = int(self.total_time) // 60
+            seconds = int(self.total_time) % 60
+            seconds_100s = int((self.total_time - seconds) * 100)
+            score = f"{round(self.score * self.total_time * 100)}"
+            final_score = f"Final Score:{score}"
+            arcade.draw_text(final_score, SCREEN_WIDTH / 2, SCREEN_HEIGHT - 100 , arcade.color.WHITE, 15, anchor_x="center")

@@ -125,7 +125,7 @@ class MyGame(arcade.Window):
         """ Set up the game and initialize the variables. """
 
         self.score = 0
-        self.level = 1
+        # self.level = 1
 
         # Sprite lists
         self.player_list = arcade.SpriteList()

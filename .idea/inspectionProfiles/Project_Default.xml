@@ -1,0 +1,18 @@
+<component name="InspectionProjectProfileManager">
+  <profile version="1.0">
+    <option name="myName" value="Project Default" />
+    <inspection_tool class="PyUnresolvedReferencesInspection" enabled="true" level="WARNING" enabled_by_default="true">
+      <option name="ignoredIdentifiers">
+        <list>
+          <option value="week04.dice.game.director.game" />
+          <option value="Thrower" />
+          <option value="game.thrower" />
+          <option value="_current" />
+          <option value="_players" />
+          <option value="position" />
+          <option value="snake.game.director.game" />
+        </list>
+      </option>
+    </inspection_tool>
+  </profile>
+</component>

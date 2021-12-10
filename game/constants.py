@@ -35,3 +35,4 @@ PLAY_GAME = 0
 
 PICTURES_PATH = os.path.dirname(os.path.abspath(__file__)) + "/pictures/"
 
+MINIMUM_TIME = 5.5

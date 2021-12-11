@@ -6,5 +6,3 @@ class Level:
     def __init__(self):
         self.velocity = 0
 
-
-

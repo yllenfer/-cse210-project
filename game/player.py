@@ -4,17 +4,30 @@ import os
 
 
 class Player(arcade.Sprite):
+    """
+    A sprite that moves throughout the level and tries to avoid getting hit by the cars
 
+    stereotype: information holder, player creator
+
+    attributes: 
+                self.center_x: positioning on the x axis in the center
+                self.center_y: positioning on the y axis at the bottom
+    """
     def __init__(self):
-        # self.player_sprite = None
-        super().__init__(":resources:images/animated_characters/female_person/femalePerson_idle.png", SPRITE_SCALING)
+        """
+        class constructor
+
+        """
+        super().__init__(":resources:images/enemies/frog.png", SPRITE_SCALING)
 
         self.center_x = 400
         self.center_y = 50
 
     def update(self):
 
-        """ Move the player """
+        """ 
+        update information about the player such as the changes in speed, direction, and boundries
+        """
 
         self.center_x += self.change_x
         self.center_y += self.change_y
